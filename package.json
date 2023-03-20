@@ -1,0 +1,16 @@
+{
+  "name": "billbot",
+  "version": "0.0.0",
+  "description": "A fresh new Architect project!",
+  "scripts": {
+    "start": "npx sandbox"
+  },
+  "devDependencies": {
+    "@architect/architect": "^10.10.3"
+  },
+  "dependencies": {
+    "@architect/functions": "^5.3.4",
+    "@architect/plugin-lambda-invoker": "^1.0.0",
+    "mastodon-api": "^1.3.0"
+  }
+}
