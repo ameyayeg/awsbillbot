@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Exported by architect/package@8.4.1 on 2023-03-17T15:08:23.656Z
+Description: Exported by architect/package@8.4.1 on 2023-03-20T14:34:00.036Z
 Resources:
   Role:
     Type: AWS::IAM::Role
@@ -195,7 +195,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://billbot3-cfn-deployments-5fc23/467e6b26b3570cb57e187f01205c54c0
+      CodeUri: s3://billbot3-cfn-deployments-5fc23/bec2b4279edfa843705e760c0e554613
       Runtime: nodejs18.x
       Architectures:
       - arm64
@@ -240,7 +240,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://billbot3-cfn-deployments-5fc23/3dd0e2dd93476752377914ecb0ac570a
+      CodeUri: s3://billbot3-cfn-deployments-5fc23/41b951677d8e8459631932a3226d2231
       Runtime: nodejs18.x
       Architectures:
       - arm64
