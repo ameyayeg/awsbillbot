@@ -45,7 +45,7 @@ export async function handler(event) {
             ? `is one bill`
             : `are ${formattedBills.length} bills`
         } on the agenda today. Please find details below. #cdnpoli
-      )`,
+      `,
         ...formattedBills,
       ]
       await publishBills(bills)
