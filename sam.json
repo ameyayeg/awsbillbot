@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Transform": "AWS::Serverless-2016-10-31",
-  "Description": "Exported by architect/package@8.4.1 on 2023-03-21T13:46:13.999Z",
+  "Description": "Exported by architect/package@8.4.1 on 2023-04-12T22:36:25.703Z",
   "Resources": {
     "Role": {
       "Type": "AWS::IAM::Role",
@@ -111,6 +111,23 @@
         },
         "Value": {
           "Ref": "PostbillEventTopic"
+        }
+      }
+    },
+    "TweetbillEventTopicParam": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Name": {
+          "Fn::Sub": [
+            "/${AWS::StackName}/events/${event}",
+            {
+              "event": "tweetbill"
+            }
+          ]
+        },
+        "Value": {
+          "Ref": "TweetbillEventTopic"
         }
       }
     },
@@ -282,7 +299,11 @@
             "ARC_STATIC_SPA": false,
             "ACCESS_TOKEN": "3H0YWldYQ7z--R2NPdA16GqK_AtlZ6Vn1gCvXs7Wg5U",
             "CLIENT_KEY": "m--6ewT3v3E6N2M_1LzTgXXOhzLhXxpbVRdvh7wyFGQ",
-            "CLIENT_SECRET": "gCQd_XqWmcBzNVH2EfJZRY9C9jQrXWxFBxXbTB5Qonw"
+            "CLIENT_SECRET": "gCQd_XqWmcBzNVH2EfJZRY9C9jQrXWxFBxXbTB5Qonw",
+            "TWITTER_ACCESS_TOKEN": "1572763815351128064-6xUKr4T25fDS6lCJ5nqohHNbumQ2Vy",
+            "TWITTER_ACCESS_TOKEN_SECRET": "7aSFpxyIE7NzGPH5F6bzn4ylX4g9SZLKVZ9i2fgYi5GZs",
+            "TWITTER_API_KEY": "jbT0eEP0DHtv2VxiVE3ezCMSE",
+            "TWITTER_API_SECRET": "R20LZBrEysCk6BQ8nwquMcrYLLc0dZUu9QYWhmy7ZsaBCMi2AH"
           }
         },
         "Role": {
@@ -345,7 +366,11 @@
             },
             "ACCESS_TOKEN": "3H0YWldYQ7z--R2NPdA16GqK_AtlZ6Vn1gCvXs7Wg5U",
             "CLIENT_KEY": "m--6ewT3v3E6N2M_1LzTgXXOhzLhXxpbVRdvh7wyFGQ",
-            "CLIENT_SECRET": "gCQd_XqWmcBzNVH2EfJZRY9C9jQrXWxFBxXbTB5Qonw"
+            "CLIENT_SECRET": "gCQd_XqWmcBzNVH2EfJZRY9C9jQrXWxFBxXbTB5Qonw",
+            "TWITTER_ACCESS_TOKEN": "1572763815351128064-6xUKr4T25fDS6lCJ5nqohHNbumQ2Vy",
+            "TWITTER_ACCESS_TOKEN_SECRET": "7aSFpxyIE7NzGPH5F6bzn4ylX4g9SZLKVZ9i2fgYi5GZs",
+            "TWITTER_API_KEY": "jbT0eEP0DHtv2VxiVE3ezCMSE",
+            "TWITTER_API_SECRET": "R20LZBrEysCk6BQ8nwquMcrYLLc0dZUu9QYWhmy7ZsaBCMi2AH"
           }
         },
         "Role": {
@@ -381,6 +406,76 @@
         "Subscription": []
       }
     },
+    "TweetbillEventLambda": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.handler",
+        "CodeUri": "/Users/casserole/Developer/billbot/src/events/tweetbill",
+        "Runtime": "nodejs18.x",
+        "Architectures": [
+          "arm64"
+        ],
+        "MemorySize": 1152,
+        "EphemeralStorage": {
+          "Size": 512
+        },
+        "Timeout": 5,
+        "Environment": {
+          "Variables": {
+            "ARC_APP_NAME": "billbot3",
+            "ARC_ENV": "staging",
+            "ARC_ROLE": {
+              "Ref": "Role"
+            },
+            "ARC_SESSION_TABLE_NAME": "jwe",
+            "ARC_STACK_NAME": {
+              "Ref": "AWS::StackName"
+            },
+            "ARC_STATIC_BUCKET": {
+              "Ref": "StaticBucket"
+            },
+            "ACCESS_TOKEN": "3H0YWldYQ7z--R2NPdA16GqK_AtlZ6Vn1gCvXs7Wg5U",
+            "CLIENT_KEY": "m--6ewT3v3E6N2M_1LzTgXXOhzLhXxpbVRdvh7wyFGQ",
+            "CLIENT_SECRET": "gCQd_XqWmcBzNVH2EfJZRY9C9jQrXWxFBxXbTB5Qonw",
+            "TWITTER_ACCESS_TOKEN": "1572763815351128064-6xUKr4T25fDS6lCJ5nqohHNbumQ2Vy",
+            "TWITTER_ACCESS_TOKEN_SECRET": "7aSFpxyIE7NzGPH5F6bzn4ylX4g9SZLKVZ9i2fgYi5GZs",
+            "TWITTER_API_KEY": "jbT0eEP0DHtv2VxiVE3ezCMSE",
+            "TWITTER_API_SECRET": "R20LZBrEysCk6BQ8nwquMcrYLLc0dZUu9QYWhmy7ZsaBCMi2AH"
+          }
+        },
+        "Role": {
+          "Fn::Sub": [
+            "arn:aws:iam::${AWS::AccountId}:role/${roleName}",
+            {
+              "roleName": {
+                "Ref": "Role"
+              }
+            }
+          ]
+        },
+        "Events": {
+          "TweetbillEvent": {
+            "Type": "SNS",
+            "Properties": {
+              "Topic": {
+                "Ref": "TweetbillEventTopic"
+              }
+            }
+          }
+        }
+      },
+      "ArcMetadata": {
+        "pragma": "events",
+        "name": "tweetbill"
+      }
+    },
+    "TweetbillEventTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "Tweetbill",
+        "Subscription": []
+      }
+    },
     "CheckbillsScheduledLambda": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
@@ -411,7 +506,11 @@
             },
             "ACCESS_TOKEN": "3H0YWldYQ7z--R2NPdA16GqK_AtlZ6Vn1gCvXs7Wg5U",
             "CLIENT_KEY": "m--6ewT3v3E6N2M_1LzTgXXOhzLhXxpbVRdvh7wyFGQ",
-            "CLIENT_SECRET": "gCQd_XqWmcBzNVH2EfJZRY9C9jQrXWxFBxXbTB5Qonw"
+            "CLIENT_SECRET": "gCQd_XqWmcBzNVH2EfJZRY9C9jQrXWxFBxXbTB5Qonw",
+            "TWITTER_ACCESS_TOKEN": "1572763815351128064-6xUKr4T25fDS6lCJ5nqohHNbumQ2Vy",
+            "TWITTER_ACCESS_TOKEN_SECRET": "7aSFpxyIE7NzGPH5F6bzn4ylX4g9SZLKVZ9i2fgYi5GZs",
+            "TWITTER_API_KEY": "jbT0eEP0DHtv2VxiVE3ezCMSE",
+            "TWITTER_API_SECRET": "R20LZBrEysCk6BQ8nwquMcrYLLc0dZUu9QYWhmy7ZsaBCMi2AH"
           }
         },
         "Role": {
@@ -538,6 +637,12 @@
       "Description": "An SNS Topic",
       "Value": {
         "Ref": "PostbillEventTopic"
+      }
+    },
+    "TweetbillEventTopic": {
+      "Description": "An SNS Topic",
+      "Value": {
+        "Ref": "TweetbillEventTopic"
       }
     },
     "BucketURL": {

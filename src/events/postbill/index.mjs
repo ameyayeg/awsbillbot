@@ -23,7 +23,7 @@ async function toot(status, id = null) {
 
 async function postbill(event) {
   const { bills } = event
-  // bills.forEach((bill) => console.log(bill))
+
   let id = null
 
   if (bills.length > 0) {

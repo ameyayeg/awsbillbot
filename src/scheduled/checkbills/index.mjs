@@ -7,6 +7,10 @@ async function publishBills(bills) {
     name: 'postbill',
     payload: { bills },
   })
+  await arc.events.publish({
+    name: 'tweetbill',
+    payload: { bills },
+  })
 }
 
 export async function handler(event) {
@@ -16,7 +20,7 @@ export async function handler(event) {
   if (allBills.length === 0) {
     const tweetText = `${new Date().toLocaleDateString(
       'en-GB'
-    )}\nNo government bills being debated today.\nMore information: https://www.parl.ca/legisinfo/\n#cdnpoli`
+    )}\nParliament is not sitting today.\nMore information: https://www.parl.ca/legisinfo/\n#cdnpoli`
     await publishBills([tweetText])
   } else {
     const governmentBills = allBills.filter((bill) => bill.IsGovernmentBill)

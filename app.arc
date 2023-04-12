@@ -15,6 +15,7 @@ runtime nodejs18.x
 
 @events
 postbill
+tweetbill
 
 @plugins
 architect/plugin-lambda-invoker
