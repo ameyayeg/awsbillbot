@@ -40,8 +40,8 @@ export async function handler(event) {
             minister: bill.SponsorAffiliationTitle,
           }
         })
-        .map((bill, idx) => {
-          return `${idx}/${formattedBills.length} Bill: ${bill.number}\nTitle: ${bill.title}\nStatus: ${bill.status}\nPortfolio: ${bill.minister}\n${bill.url}`
+        .map((bill) => {
+          return `Bill: ${bill.number}\nTitle: ${bill.title}\nStatus: ${bill.status}\nPortfolio: ${bill.minister}\n${bill.url}`
         })
       const bills = [
         `${new Date().toLocaleDateString('en-GB')}\nGood morning, there ${
