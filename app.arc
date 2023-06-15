@@ -5,7 +5,7 @@ billbot3
 get /
 
 @scheduled
-checkbills cron(0 11 ? * * *)
+checkbills cron(0 11 ? * MON-FRI *)
 
 @aws
 profile default
@@ -15,7 +15,6 @@ runtime nodejs18.x
 
 @events
 postbill
-tweetbill
 
 @plugins
 architect/plugin-lambda-invoker

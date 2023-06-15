@@ -22,7 +22,7 @@ async function toot(status, id = null) {
 }
 
 async function postbill(event) {
-  const { bills } = event
+  const { bills = [] } = event
 
   let id = null
 

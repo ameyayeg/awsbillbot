@@ -7,10 +7,6 @@ async function publishBills(bills) {
     name: 'postbill',
     payload: { bills },
   })
-  await arc.events.publish({
-    name: 'tweetbill',
-    payload: { bills },
-  })
 }
 
 export async function handler(event) {
@@ -30,19 +26,20 @@ export async function handler(event) {
       )}\nNo government bills being debated today.\nMore information: https://www.parl.ca/legisinfo/\n#cdnpoli`
       await publishBills([tweetText])
     } else {
-      const formattedBills = governmentBills
-        .map((bill) => {
-          return {
-            number: bill.NumberCode,
-            title: bill.LongTitle,
-            status: bill.StatusName,
-            url: `http://www.parl.ca/legisinfo/en/bill/${bill.ParliamentNumber}-${bill.SessionNumber}/${bill.NumberCode}`,
-            minister: bill.SponsorAffiliationTitle,
-          }
-        })
-        .map((bill) => {
-          return `Bill: ${bill.number}\nTitle: ${bill.title}\nStatus: ${bill.status}\nPortfolio: ${bill.minister}\n${bill.url}`
-        })
+      const tempBills = governmentBills.map((bill) => {
+        return {
+          number: bill.NumberCode,
+          title: bill.LongTitle,
+          status: bill.StatusName,
+          url: `http://www.parl.ca/legisinfo/en/bill/${bill.ParliamentNumber}-${bill.SessionNumber}/${bill.NumberCode}`,
+          minister: bill.SponsorAffiliationTitle,
+        }
+      })
+      const formattedBills = tempBills.map((bill, idx) => {
+        return `${idx + 1}/${tempBills.length}\nBill: ${bill.number}\nTitle: ${
+          bill.title
+        }\nStatus: ${bill.status}\nPortfolio: ${bill.minister}\n${bill.url}`
+      })
       const bills = [
         `${new Date().toLocaleDateString('en-GB')}\nGood morning, there ${
           formattedBills.length === 1
