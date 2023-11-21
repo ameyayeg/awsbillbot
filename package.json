@@ -6,7 +6,7 @@
     "start": "npx sandbox"
   },
   "devDependencies": {
-    "@architect/architect": "^10.12.5"
+    "@architect/architect": "^10.16.2"
   },
   "dependencies": {
     "@architect/functions": "^5.3.4",
