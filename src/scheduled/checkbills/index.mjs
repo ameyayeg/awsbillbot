@@ -1,4 +1,5 @@
 import arc from '@architect/functions'
+import puppeteer from 'puppeteer'
 
 const url = `https://www.parl.ca/legisinfo/en/overview/json/onagenda`
 
@@ -10,8 +11,24 @@ async function publishBills(bills) {
 }
 
 export async function handler(event) {
-  const bills = await fetch(url)
-  const allBills = await bills.json()
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+
+  await page.goto('https://www.parl.ca/legisinfo/en/overview')
+
+  const allBills = await page.evaluate(() => {
+    // find the url:
+    const url = document
+      .querySelector('#btn-exportAsJson-OnAgenda')
+      .getAttribute('href')
+    // download it using javacript fetch:
+    return fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+    }).then((response) => response.json())
+  })
+
+  await browser.close()
 
   if (allBills.length === 0) {
     const tweetText = `${new Date().toLocaleDateString(
@@ -49,6 +66,7 @@ export async function handler(event) {
       `,
         ...formattedBills,
       ]
+      console.log(bills)
       await publishBills(bills)
     }
   }
