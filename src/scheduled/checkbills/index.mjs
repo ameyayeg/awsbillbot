@@ -1,6 +1,6 @@
 import arc from '@architect/functions'
 
-const url = `https://www.parl.ca/legisinfo/en/overview/json/onagenda`
+const url = `http://api.scraperapi.com?api_key=${process.env.SCRAPER_API_KEY}&url=https://www.parl.ca/legisinfo/en/overview/json/onagenda`
 
 async function publishBills(bills) {
   await arc.events.publish({
@@ -49,7 +49,8 @@ export async function handler(event) {
       `,
         ...formattedBills,
       ]
-      await publishBills(bills)
+      console.log(bills)
+      // await publishBills(bills)
     }
   }
 
