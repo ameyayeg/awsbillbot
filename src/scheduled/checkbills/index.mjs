@@ -49,8 +49,7 @@ export async function handler(event) {
       `,
         ...formattedBills,
       ]
-      console.log(bills)
-      // await publishBills(bills)
+      await publishBills(bills)
     }
   }
 
