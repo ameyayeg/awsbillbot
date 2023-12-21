@@ -1,6 +1,7 @@
 import arc from '@architect/functions'
+import tiny from 'tiny-json-http'
 
-const url = `http://api.scraperapi.com?api_key=${process.env.SCRAPER_API_KEY}&url=https://www.parl.ca/legisinfo/en/overview/json/onagenda`
+const url = `https://www.parl.ca/legisinfo/en/overview/json/onagenda`
 
 async function publishBills(bills) {
   await arc.events.publish({
@@ -10,8 +11,10 @@ async function publishBills(bills) {
 }
 
 export async function handler(event) {
-  const bills = await fetch(url)
-  const allBills = await bills.json()
+  const { body } = await tiny.get({ url })
+  const allBills = JSON.parse(body)
+
+  console.log(typeof allBills)
 
   if (allBills.length === 0) {
     const tweetText = `${new Date().toLocaleDateString(
@@ -46,7 +49,7 @@ export async function handler(event) {
             ? `is one bill`
             : `are ${formattedBills.length} bills`
         } on the agenda today. Please find details below. #cdnpoli
-      `,
+        `,
         ...formattedBills,
       ]
       await publishBills(bills)
