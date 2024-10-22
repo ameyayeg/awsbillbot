@@ -12,6 +12,7 @@ profile default
 region us-east-2
 architecture arm64
 runtime nodejs18.x
+timeout 30
 
 @events
 postbill
