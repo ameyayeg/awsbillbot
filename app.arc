@@ -11,7 +11,7 @@ checkbills cron(0 11 ? * MON-FRI *)
 profile default
 region us-east-2
 architecture arm64
-runtime nodejs18.x
+runtime nodejs22.x
 timeout 30
 
 @events

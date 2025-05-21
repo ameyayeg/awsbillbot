@@ -14,8 +14,6 @@ export async function handler(event) {
   const { body } = await tiny.get({ url })
   const allBills = JSON.parse(body)
 
-  console.log(typeof allBills)
-
   if (allBills.length === 0) {
     const tweetText = `${new Date().toLocaleDateString(
       'en-GB'
